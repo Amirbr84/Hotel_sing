@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2A3624">
+<title>هتل عمارت پارسیان | رزرو آنلاین اتاق</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF7EF;
+  --cream:#F3EBDB;
+  --beige:#E6D9BE;
+  --brown:#3B2B20;
+  --brown-soft:#6E5A49;
+  --gold:#B08D4F;
+  --gold-deep:#8A6A33;
+  --gold-soft:#E3CF9F;
+  --olive:#38472F;
+  --olive-deep:#2A3624;
+  --line:rgba(59,43,32,.16);
+  --err:#9A3A2D;
+  --err-bg:#F7E6E1;
+  --shadow:0 10px 28px rgba(59,43,32,.10);
+  --shadow-lg:0 20px 50px rgba(59,43,32,.18);
+  --font:"Vazirmatn","Estedad","IRANSansX",Tahoma,"Segoe UI",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
+  background:var(--paper);color:var(--brown);
+  font-family:var(--font);font-size:16px;line-height:1.85;
+  -webkit-tap-highlight-color:transparent;
+}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,p,dl,dd,ol,ul{margin:0;padding:0}
+ol,ul{list-style:none}
+:focus-visible{outline:3px solid var(--gold-deep);outline-offset:2px}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--olive-deep);color:var(--cream);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 18px;border-bottom:1px solid rgba(227,207,159,.25);
+}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:30px;height:36px;color:var(--gold-soft);flex:none}
+.brand strong{display:block;font-weight:500;font-size:1.05rem;line-height:1.3;color:#fff}
+.brand small{display:block;font-size:.78rem;color:var(--gold-soft);line-height:1.3}
+.topnote{font-size:.85rem;color:var(--beige);display:none}
+@media(min-width:720px){.topnote{display:block}.topbar{padding:12px 36px}}
+
+/* ---------- Progress ---------- */
+.progress{background:var(--cream);border-bottom:1px solid var(--line);padding:14px 14px 10px}
+.progress-inner{max-width:960px;margin:0 auto}
+.progress-label{font-size:.9rem;color:var(--brown-soft);margin-bottom:8px;text-align:center}
+#progressList{display:flex}
+#progressList li{position:relative;flex:1;display:flex;flex-direction:column;align-items:center}
+#progressList li::before{
+  content:"";position:absolute;top:14px;inset-inline-start:50%;width:100%;height:2px;background:var(--line);z-index:0
+}
+#progressList li:last-child::before{display:none}
+#progressList li.done::before{background:var(--gold)}
+.p-btn{display:flex;flex-direction:column;align-items:center;background:none;border:0;padding:0;position:relative;z-index:1}
+.p-dot{
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:var(--paper);border:2px solid var(--line);font-size:.78rem;font-weight:500;color:var(--brown-soft);
+  transition:background .25s,border-color .25s,color .25s;
+}
+.done .p-dot{background:var(--gold);border-color:var(--gold);color:#fff}
+.current .p-dot{background:var(--olive);border-color:var(--olive);color:#fff;box-shadow:0 0 0 4px rgba(56,71,47,.16)}
+.p-name{display:none;font-size:.8rem;margin-top:4px;color:var(--brown-soft)}
+.current .p-name{color:var(--olive);font-weight:500}
+@media(min-width:760px){
+  .progress-label{display:none}
+  .p-name{display:block}
+  .p-dot{width:32px;height:32px}
+  #progressList li::before{top:16px}
+}
+
+/* ---------- Layout ---------- */
+main{flex:1}
+.step{display:none}
+.step.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.wrap{max-width:960px;margin:0 auto;padding:26px 18px 36px}
+.wrap.narrow{max-width:720px}
+.step-head{margin-bottom:22px}
+.step-head h2{font-size:1.65rem;font-weight:500;line-height:1.5;color:var(--olive-deep)}
+.step-head p{color:var(--brown-soft);margin-top:2px}
+.err{
+  margin-top:18px;padding:12px 16px;border-radius:12px;background:var(--err-bg);
+  color:var(--err);border:1px solid rgba(154,58,45,.35);font-weight:500;
+}
+
+/* ---------- Images with safe fallback ---------- */
+.photo{
+  --ov:linear-gradient(rgba(28,19,12,.15),rgba(28,19,12,.55));
+  background-image:var(--ov),var(--img,none),
+    radial-gradient(circle at 28% 22%,rgba(176,141,79,.45),transparent 55%),
+    linear-gradient(135deg,#6a5540,#2f3b2c);
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  min-height:48px;padding:0 26px;border-radius:12px;border:1px solid transparent;
+  font-weight:500;font-size:1rem;transition:transform .2s,background .2s,box-shadow .2s,border-color .2s;
+}
+.btn:active{transform:scale(.98)}
+.btn-gold{background:var(--gold);color:#241810}
+.btn-olive{background:var(--olive);color:var(--cream)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--brown)}
+.btn-lg{min-height:54px;padding:0 38px;font-size:1.1rem}
+@media(hover:hover){
+  .btn-gold:hover{background:#C09B58}
+  .btn-olive:hover{background:var(--olive-deep)}
+  .btn-ghost:hover{border-color:var(--gold);background:var(--cream)}
+}
+
+/* ---------- Welcome ---------- */
+.hero{
+  --ov:linear-gradient(to top,rgba(28,19,12,.86) 0%,rgba(28,19,12,.45) 55%,rgba(28,19,12,.3) 100%);
+  min-height:calc(100svh - 190px);min-height:max(460px,calc(100svh - 190px));
+  display:flex;align-items:flex-end;color:#fff;
+}
+.hero-copy{max-width:960px;width:100%;margin:0 auto;padding:40px 22px 44px}
+.hero h1{font-size:clamp(2.3rem,8vw,4.2rem);font-weight:300;line-height:1.35;letter-spacing:0}
+.hero p{max-width:30em;margin:12px 0 26px;font-size:1.1rem;color:var(--beige)}
+.features{display:grid;grid-template-columns:repeat(2,1fr);background:var(--cream);border-bottom:1px solid var(--line)}
+.features li{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.features li:nth-child(odd){border-inline-start:0}
+.features li:nth-child(even){border-inline-start:1px solid var(--line)}
+.features .ficon{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:var(--paper);border:1px solid var(--gold-soft);font-size:1.25rem;
+}
+.features strong{font-weight:500;font-size:.98rem}
+@media(min-width:760px){
+  .features{grid-template-columns:repeat(4,1fr)}
+  .features li{border-bottom:0;justify-content:center;padding:24px 16px}
+  .features li:nth-child(n){border-inline-start:1px solid var(--line)}
+  .features li:first-child{border-inline-start:0}
+}
+
+/* ---------- Cities ---------- */
+.city-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:640px){.city-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.city-grid{grid-template-columns:repeat(6,1fr)}}
+.city-btn{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 10px;min-height:76px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.city-name{font-size:1.15rem;font-weight:500}
+.city-tag{font-size:.8rem;color:var(--brown-soft)}
+.city-btn.selected{background:var(--olive);border-color:var(--olive);color:var(--cream)}
+.city-btn.selected .city-tag{color:var(--gold-soft)}
+@media(hover:hover){.city-btn:not(.selected):hover{border-color:var(--gold);box-shadow:var(--shadow)}}
+#hotelBlock{margin-top:30px}
+#hotelBlock h3{font-size:1.25rem;font-weight:500;margin-bottom:14px;color:var(--olive-deep)}
+.hotel-list{display:grid;gap:16px}
+@media(min-width:720px){.hotel-list{grid-template-columns:repeat(2,1fr)}}
+.hotel-card{
+  display:block;width:100%;text-align:start;padding:0;background:#fff;border:1px solid var(--line);
+  border-radius:20px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;
+}
+.hotel-card .photo{display:block;height:170px;position:relative}
+.hotel-body{display:block;padding:14px 16px 16px}
+.hotel-name{display:block;font-size:1.15rem;font-weight:500}
+.stars{display:block;color:var(--gold);letter-spacing:2px;font-size:1rem;line-height:1.6}
+.stars small{letter-spacing:0;color:var(--brown-soft);font-size:.85rem;margin-inline-start:6px}
+.hotel-loc{display:block;color:var(--brown-soft);font-size:.92rem}
+.hotel-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.rating{background:var(--olive);color:var(--cream);border-radius:8px;padding:0 10px;font-size:.9rem;font-weight:500}
+.hotel-price{font-weight:500;color:var(--olive-deep)}
+.hotel-price small{color:var(--brown-soft);font-weight:400}
+.hotel-card.selected,.room-card.selected{box-shadow:0 0 0 3px var(--gold),var(--shadow)}
+@media(hover:hover){.hotel-card:hover,.room-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .hotel-card.selected:hover,.room-card.selected:hover{box-shadow:0 0 0 3px var(--gold),var(--shadow-lg)}}
+.badge{
+  position:absolute;top:12px;inset-inline-start:12px;background:var(--gold);color:#241810;
+  font-size:.8rem;font-weight:500;padding:0 12px;border-radius:999px;line-height:1.9;
+}
+.tick{
+  position:absolute;top:12px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;
+  background:var(--olive);color:#fff;display:none;place-items:center;font-size:1rem;
+}
+.selected>.photo .tick,.selected .tick{display:grid}
+
+/* ---------- Dates ---------- */
+.date-grid{display:grid;gap:16px}
+@media(min-width:640px){.date-grid{grid-template-columns:1fr 1fr}}
+.field{display:block}
+.field>span.lbl{display:block;font-weight:500;margin-bottom:4px}
+.field input[type=text],.field input[type=email],.field input[type=tel],.field input[type=date]{
+  width:100%;min-height:50px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,79,.25)}
+.field input.invalid{border-color:var(--err);background:var(--err-bg)}
+.field small{display:block;color:var(--brown-soft);font-size:.88rem;margin-top:2px;min-height:1.6em}
+.field-error{display:block;color:var(--err);font-size:.88rem;font-weight:500;margin-top:2px}
+.nights-card{
+  margin-top:22px;padding:18px 20px;border-radius:16px;background:var(--cream);border:1px solid var(--gold-soft);
+  display:flex;flex-direction:column;gap:2px;
+}
+.nights-card strong{font-size:1.4rem;font-weight:500;color:var(--olive-deep)}
+.nights-card span{color:var(--brown-soft);font-size:.92rem}
+.nights-card.error{background:var(--err-bg);border-color:rgba(154,58,45,.4)}
+.nights-card.error strong{color:var(--err);font-size:1.05rem}
+
+/* ---------- Guests ---------- */
+.counter-list{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.counter-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.counter-row:last-child{border-bottom:0}
+.counter-row b{display:block;font-weight:500;font-size:1.1rem}
+.counter-row small{color:var(--brown-soft)}
+.stepper{display:flex;align-items:center;gap:14px}
+.round-btn{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);background:var(--paper);
+  font-size:1.4rem;line-height:1;color:var(--gold-deep);display:grid;place-items:center;transition:background .2s;
+}
+@media(hover:hover){.round-btn:hover{background:var(--gold-soft)}}
+.stepper output{min-width:34px;text-align:center;font-size:1.35rem;font-weight:500}
+.guest-summary{margin-top:18px;padding:14px 18px;border-radius:14px;background:var(--cream);color:var(--olive-deep);font-weight:500;text-align:center}
+
+/* ---------- Rooms ---------- */
+.room-grid{display:grid;gap:18px}
+@media(min-width:720px){.room-grid{grid-template-columns:repeat(2,1fr)}}
+.room-card{
+  display:block;width:100%;text-align:start;padding:0;background:#fff;border:1px solid var(--line);
+  border-radius:20px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;
+}
+.room-card .photo{display:block;height:160px;position:relative}
+.chip-cap{
+  position:absolute;bottom:10px;inset-inline-start:12px;background:rgba(251,247,239,.92);color:var(--brown);
+  border-radius:999px;padding:0 12px;font-size:.84rem;line-height:1.9;
+}
+.room-body{display:block;padding:14px 16px 16px}
+.room-name{display:block;font-size:1.15rem;font-weight:500}
+.room-desc{display:block;color:var(--brown-soft);font-size:.93rem;margin-bottom:8px}
+.amen{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.amen span{background:var(--cream);border-radius:999px;padding:0 10px;font-size:.82rem;line-height:1.9}
+.room-warn{display:block;color:var(--err);font-size:.86rem;font-weight:500;margin-bottom:6px}
+.room-price{display:flex;align-items:baseline;gap:8px;padding-top:10px;border-top:1px dashed var(--line)}
+.room-price .now{font-size:1.25rem;font-weight:500;color:var(--olive-deep)}
+.room-price .old{color:var(--brown-soft);text-decoration:line-through;font-size:.92rem}
+.room-price small{color:var(--brown-soft)}
+
+/* ---------- Services ---------- */
+.service-grid{display:grid;gap:12px}
+@media(min-width:720px){.service-grid{grid-template-columns:repeat(2,1fr)}}
+.service-card{
+  position:relative;display:flex;align-items:center;gap:14px;width:100%;text-align:start;
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.service-icon{width:46px;height:46px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-size:1.4rem;flex:none}
+.service-text{flex:1;display:block}
+.service-name{display:block;font-weight:500}
+.service-desc{display:block;color:var(--brown-soft);font-size:.86rem;line-height:1.6}
+.service-price{display:block;font-weight:500;color:var(--olive-deep);text-align:end;white-space:nowrap}
+.service-price small{display:block;font-weight:400;color:var(--brown-soft);font-size:.76rem;white-space:normal;max-width:9em}
+.service-card .check{
+  width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;
+  font-size:.8rem;color:transparent;transition:all .2s;
+}
+.service-card .check::after{content:"✓"}
+.service-card.selected{border-color:var(--gold);background:#FFFCF5;box-shadow:0 0 0 2px var(--gold)}
+.service-card.selected .check{background:var(--olive);border-color:var(--olive);color:#fff}
+@media(hover:hover){.service-card:not(.selected):hover{border-color:var(--gold)}}
+.service-total{margin-top:18px;padding:14px 18px;border-radius:14px;background:var(--cream);display:flex;justify-content:space-between;font-weight:500}
+
+/* ---------- Guest form ---------- */
+.form-grid{display:grid;gap:16px}
+@media(min-width:640px){.form-grid{grid-template-columns:1fr 1fr}}
+.form-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 20px;box-shadow:var(--shadow)}
+
+/* ---------- Payment ---------- */
+.pay-options{display:grid;gap:12px}
+@media(min-width:640px){.pay-options{grid-template-columns:1fr 1fr}}
+.pay-option{position:relative;display:block}
+.pay-option input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pay-body{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:#fff;
+  transition:border-color .2s,box-shadow .2s;
+}
+.pay-body .service-icon{background:var(--cream)}
+.pay-body b{display:block;font-weight:500}
+.pay-body small{color:var(--brown-soft)}
+.pay-option input:checked+.pay-body{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);background:#FFFCF5}
+.pay-option input:focus-visible+.pay-body{outline:3px solid var(--gold-deep);outline-offset:2px}
+.sim-note{margin:18px 0 14px;padding:12px 16px;border-radius:12px;background:var(--cream);border:1px dashed var(--gold);font-size:.92rem;color:var(--brown-soft)}
+.pay-panel{margin-top:6px}
+
+/* ---------- Review ---------- */
+.review-grid{display:grid;gap:16px}
+@media(min-width:760px){.review-grid{grid-template-columns:1fr 1fr}}
+.review-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow)}
+.review-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.review-head h3{font-size:1.1rem;font-weight:500;color:var(--olive-deep)}
+.link-btn{background:none;border:0;color:var(--gold-deep);font-weight:500;padding:6px 4px;text-decoration:underline;text-underline-offset:4px}
+.review-card dl>div{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px dashed rgba(59,43,32,.1)}
+.review-card dl>div:last-child{border-bottom:0}
+.review-card dt{color:var(--brown-soft);flex:none}
+.review-card dd{font-weight:500;text-align:end}
+.price-card{margin-top:18px;border-radius:20px;background:var(--olive-deep);color:var(--cream);padding:20px 22px;box-shadow:var(--shadow-lg)}
+.price-card .pr{display:flex;justify-content:space-between;gap:12px;padding:6px 0}
+.price-card .pr small{display:block;color:var(--gold-soft);font-size:.82rem}
+.price-card .pr.sub{padding-inline-start:14px;font-size:.92rem;color:var(--beige)}
+.price-card .total{margin-top:10px;padding-top:14px;border-top:1px solid rgba(227,207,159,.4);align-items:baseline}
+.price-card .total b{font-size:1.1rem;font-weight:500}
+.price-card .total strong{font-size:1.8rem;font-weight:500;color:var(--gold-soft)}
+
+/* ---------- Voucher ---------- */
+.done-head{text-align:center;margin-bottom:22px}
+.done-head .seal{
+  width:68px;height:68px;margin:0 auto 10px;border-radius:50%;background:var(--olive);display:grid;place-items:center;
+  animation:pop .5s cubic-bezier(.2,1.4,.4,1);
+}
+.done-head .seal svg{width:34px;height:34px}
+.done-head .seal path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .5s .25s forwards ease}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done-head h2{font-size:1.7rem;font-weight:500;color:var(--olive-deep)}
+.done-head p{color:var(--brown-soft)}
+.voucher{background:#fff;border-radius:22px;box-shadow:var(--shadow-lg);border:1px solid var(--gold-soft);overflow:hidden;animation:fadeIn .5s .15s both}
+.v-top{background:var(--olive-deep);color:var(--cream);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.v-top .brand svg{width:34px;height:40px}
+.v-title{font-size:.95rem;color:var(--gold-soft);text-align:end}
+.v-status{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 22px;background:var(--cream);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.v-status .stamp{background:var(--olive);color:#fff;border-radius:999px;padding:0 16px;line-height:2;font-weight:500}
+.v-status .amount small{color:var(--brown-soft);margin-inline-end:6px}
+.v-status .amount b{font-size:1.25rem;font-weight:500;color:var(--olive-deep)}
+.v-body{padding:20px 22px}
+.v-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.v-grid .full{grid-column:1/-1}
+.v-grid dt{color:var(--brown-soft);font-size:.82rem;line-height:1.5}
+.v-grid dd{font-weight:500;line-height:1.6}
+.perf{position:relative;border-top:2px dashed var(--beige);margin:0}
+.perf::before,.perf::after{content:"";position:absolute;top:-14px;width:26px;height:26px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 1px var(--gold-soft)}
+.perf::before{inset-inline-start:-13px}
+.perf::after{inset-inline-end:-13px}
+.v-stub{padding:20px 22px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.v-stub small{display:block;color:var(--brown-soft);font-size:.82rem}
+.v-code{font-size:1.5rem;font-weight:500;letter-spacing:2px;direction:ltr;unicode-bidi:isolate;color:var(--olive-deep)}
+.barcode{height:46px;width:190px;color:var(--brown)}
+.barcode svg{width:100%;height:100%;display:block}
+.done-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+/* ---------- Action bar ---------- */
+.actionbar{position:sticky;bottom:0;z-index:20;background:rgba(251,247,239,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.actionbar-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.actionbar .btn-ghost{flex:none}
+.live-total{flex:1;text-align:center;line-height:1.35}
+.live-total small{display:block;color:var(--brown-soft);font-size:.78rem}
+.live-total strong{font-weight:500;color:var(--olive-deep)}
+.actionbar .btn-olive{flex:none;min-width:120px}
+.actionbar-inner>.spacer{flex:1}
+
+noscript p{padding:20px;text-align:center}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  .topbar,.progress,.actionbar,.done-actions,.features{display:none!important}
+  body{background:#fff}
+  .voucher{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<noscript><p>برای استفاده از سامانه رزرو، لطفاً جاوااسکریپت مرورگر خود را فعال کنید.</p></noscript>
+
+<header class="topbar">
+  <div class="brand">
+    <span data-logo></span>
+    <div>
+      <strong>هتل عمارت پارسیان</strong>
+      <small>رزرو آنلاین اتاق</small>
+    </div>
+  </div>
+  <div class="topnote">پشتیبانی ۲۴ ساعته: ۰۲۱-۸۸۰۰۱۲۰۰</div>
+</header>
+
+<div class="progress" id="progress" hidden>
+  <div class="progress-inner">
+    <p class="progress-label" id="progressLabel"></p>
+    <ol id="progressList"></ol>
+  </div>
+</div>
+
+<main>
+
+  <!-- 0: Welcome -->
+  <section class="step active" id="step-0" data-step="0">
+    <div class="hero photo" style="--img:url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=70')">
+      <div class="hero-copy">
+        <h1>اقامتی که به یاد می‌ماند</h1>
+        <p>اتاق مناسب خود را انتخاب کنید و اقامتی آرام و دلنشین را تجربه کنید.</p>
+        <button type="button" class="btn btn-gold btn-lg" id="btnStart">شروع رزرو</button>
+      </div>
+    </div>
+    <ul class="features">
+      <li><span class="ficon">⭐</span><strong>اقامت باکیفیت</strong></li>
+      <li><span class="ficon">🍽️</span><strong>رستوران</strong></li>
+      <li><span class="ficon">🏊</span><strong>استخر</strong></li>
+      <li><span class="ficon">🛎️</span><strong>خدمات ۲۴ ساعته</strong></li>
+    </ul>
+  </section>
+
+  <!-- 1: Destination -->
+  <section class="step" id="step-1" data-step="1">
+    <div class="wrap">
+      <div class="step-head">
+        <h2>مقصد خود را انتخاب کنید</h2>
+        <p>ابتدا شهر و سپس هتل مورد نظر خود را برگزینید.</p>
+      </div>
+      <div class="city-grid" id="cityGrid"></div>
+      <div id="hotelBlock" hidden>
+        <h3>هتل‌های <span id="hotelCityName"></span></h3>
+        <div class="hotel-list" id="hotelList"></div>
+      </div>
+      <p class="err" id="err-1" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 2: Dates -->
+  <section class="step" id="step-2" data-step="2">
+    <div class="wrap narrow">
+      <div class="step-head">
+        <h2>تاریخ اقامت</h2>
+        <p>تاریخ ورود و خروج خود را مشخص کنید.</p>
+      </div>
+      <div class="date-grid">
+        <label class="field"><span class="lbl">تاریخ ورود</span>
+          <input type="date" id="checkIn">
+          <small id="checkInFa"></small>
+        </label>
+        <label class="field"><span class="lbl">تاریخ خروج</span>
+          <input type="date" id="checkOut">
+          <small id="checkOutFa"></small>
+        </label>
+      </div>
+      <div class="nights-card" id="nightsCard">
+        <strong id="nightsText"></strong>
+        <span id="nightsNote"></span>
+      </div>
+      <p class="err" id="err-2" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 3: Guests -->
+  <section class="step" id="step-3" data-step="3">
+    <div class="wrap narrow">
+      <div class="step-head">
+        <h2>چه تعداد مهمان همراه شماست؟</h2>
+        <p>تعداد بزرگسال، کودک و اتاق را تعیین کنید.</p>
+      </div>
+      <div class="counter-list">
+        <div class="counter-row">
+          <div><b>بزرگسال</b><small>۱۲ سال به بالا</small></div>
+          <div class="stepper">
+            <button type="button" class="round-btn" data-counter="adults" data-dir="1" aria-label="افزایش تعداد بزرگسال">+</button>
+            <output id="adultsVal">۲</output>
+            <button type="button" class="round-btn" data-counter="adults" data-dir="-1" aria-label="کاهش تعداد بزرگسال">−</button>
+          </div>
+        </div>
+        <div class="counter-row">
+          <div><b>کودک</b><small>زیر ۱۲ سال</small></div>
+          <div class="stepper">
+            <button type="button" class="round-btn" data-counter="children" data-dir="1" aria-label="افزایش تعداد کودک">+</button>
+            <output id="childrenVal">۰</output>
+            <button type="button" class="round-btn" data-counter="children" data-dir="-1" aria-label="کاهش تعداد کودک">−</button>
+          </div>
+        </div>
+        <div class="counter-row">
+          <div><b>تعداد اتاق</b><small>حداکثر برابر با تعداد بزرگسالان</small></div>
+          <div class="stepper">
+            <button type="button" class="round-btn" data-counter="rooms" data-dir="1" aria-label="افزایش تعداد اتاق">+</button>
+            <output id="roomsVal">۱</output>
+            <button type="button" class="round-btn" data-counter="rooms" data-dir="-1" aria-label="کاهش تعداد اتاق">−</button>
+          </div>
+        </div>
+      </div>
+      <div class="guest-summary" id="guestSummary"></div>
+      <p class="err" id="err-3" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 4: Rooms -->
+  <section class="step" id="step-4" data-step="4">
+    <div class="wrap">
+      <div class="step-head">
+        <h2>نوع اتاق را انتخاب کنید</h2>
+        <p>قیمت‌ها برای هر شب اقامت و بر اساس هتل انتخابی شما نمایش داده می‌شود.</p>
+      </div>
+      <div class="room-grid" id="roomGrid"></div>
+      <p class="err" id="err-4" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 5: Services -->
+  <section class="step" id="step-5" data-step="5">
+    <div class="wrap">
+      <div class="step-head">
+        <h2>خدمات مورد نیاز خود را انتخاب کنید</h2>
+        <p>هر خدمتی را که لازم دارید انتخاب کنید؛ انتخاب خدمات اختیاری است.</p>
+      </div>
+      <div class="service-grid" id="serviceGrid"></div>
+      <div class="service-total"><span>هزینه خدمات انتخاب‌شده</span><b id="serviceTotal"></b></div>
+      <p class="err" id="err-5" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 6: Guest info -->
+  <section class="step" id="step-6" data-step="6">
+    <div class="wrap narrow">
+      <div class="step-head">
+        <h2>اطلاعات مهمان</h2>
+        <p>اطلاعات سرپرست رزرو را وارد کنید.</p>
+      </div>
+      <div class="form-card">
+        <div class="form-grid">
+          <label class="field"><span class="lbl">نام و نام خانوادگی</span>
+            <input type="text" id="guestName" autocomplete="name" placeholder="مثلاً: سارا احمدی">
+            <span class="field-error" id="fe-guestName" hidden></span>
+          </label>
+          <label class="field"><span class="lbl">شماره تماس</span>
+            <input type="tel" id="guestPhone" autocomplete="tel" placeholder="مثلاً: ۰۹۱۲۳۴۵۶۷۸۹">
+            <span class="field-error" id="fe-guestPhone" hidden></span>
+          </label>
+          <label class="field"><span class="lbl">ایمیل</span>
+            <input type="email" id="guestEmail" autocomplete="email" placeholder="مثلاً: name@example.com">
+            <span class="field-error" id="fe-guestEmail" hidden></span>
+          </label>
+          <label class="field"><span class="lbl">کد ملی</span>
+            <input type="text" id="guestNid" autocomplete="off" placeholder="کد ملی ۱۰ رقمی">
+            <span class="field-error" id="fe-guestNid" hidden></span>
+          </label>
+        </div>
+      </div>
+      <p class="err" id="err-6" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 7: Payment -->
+  <section class="step" id="step-7" data-step="7">
+    <div class="wrap narrow">
+      <div class="step-head">
+        <h2>روش پرداخت</h2>
+        <p>روش پرداخت مورد نظر خود را انتخاب کنید.</p>
+      </div>
+      <div class="pay-options">
+        <label class="pay-option">
+          <input type="radio" name="pay" id="payOnline" value="online" checked>
+          <span class="pay-body"><span class="service-icon">💳</span><span><b>پرداخت آنلاین</b><small>با کارت بانکی</small></span></span>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="pay" id="payArrival" value="arrival">
+          <span class="pay-body"><span class="service-icon">💵</span><span><b>پرداخت هنگام ورود</b><small>در پذیرش هتل</small></span></span>
+        </label>
+      </div>
+      <p class="sim-note">این بخش صرفاً یک شبیه‌سازی دانشگاهی است. هیچ اطلاعات بانکی ارسال یا ذخیره نمی‌شود.</p>
+      <div class="pay-panel" id="cardForm">
+        <div class="form-card">
+          <div class="form-grid">
+            <label class="field"><span class="lbl">شماره کارت</span>
+              <input type="text" id="cardNumber" autocomplete="off" placeholder="شماره کارت">
+            </label>
+            <label class="field"><span class="lbl">نام دارنده کارت</span>
+              <input type="text" id="cardHolder" autocomplete="off" placeholder="نام دارنده کارت">
+            </label>
+            <label class="field"><span class="lbl">تاریخ انقضا</span>
+              <input type="text" id="cardExpiry" autocomplete="off" placeholder="تاریخ انقضا">
+            </label>
+            <label class="field"><span class="lbl">رمز دوم (CVV)</span>
+              <input type="text" id="cardCvv" autocomplete="off" placeholder="CVV">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="pay-panel" id="arrivalNote" hidden>
+        <div class="form-card">هزینه اقامت هنگام ورود و در پذیرش هتل دریافت می‌شود. رزرو شما تا زمان ورود نگه داشته خواهد شد.</div>
+      </div>
+      <p class="err" id="err-7" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 8: Review -->
+  <section class="step" id="step-8" data-step="8">
+    <div class="wrap">
+      <div class="step-head">
+        <h2>بررسی اطلاعات رزرو</h2>
+        <p>لطفاً اطلاعات زیر را بررسی کنید و سپس رزرو را تأیید نمایید.</p>
+      </div>
+      <div id="reviewBox"></div>
+      <p class="err" id="err-8" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- 9: Confirmation -->
+  <section class="step" id="step-9" data-step="9">
+    <div class="wrap narrow">
+      <div class="done-head">
+        <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#E3CF9F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h2>رزرو شما با موفقیت ثبت شد!</h2>
+        <p>کارت رزرو شما آماده است. لطفاً هنگام ورود آن را همراه داشته باشید.</p>
+      </div>
+      <div id="voucher"></div>
+      <div class="done-actions">
+        <button type="button" class="btn btn-olive" id="btnNewBooking">شروع رزرو جدید</button>
+        <button type="button" class="btn btn-ghost" id="btnPrint">چاپ کارت رزرو</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="actionbar" id="actionbar" hidden>
+  <div class="actionbar-inner">
+    <button type="button" class="btn btn-ghost" id="btnBack">مرحله قبل</button>
+    <div class="live-total" id="liveTotal" hidden>
+      <small>مبلغ تا اینجا</small>
+      <strong id="liveTotalVal"></strong>
+    </div>
+    <span class="spacer" id="barSpacer"></span>
+    <button type="button" class="btn btn-olive" id="btnNext">ادامه</button>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Helpers ---------- */
+  var DIG = '۰۱۲۳۴۵۶۷۸۹';
+  function $(id) { return document.getElementById(id); }
+  function fa(n) { return String(n).replace(/\d/g, function (d) { return DIG[d]; }); }
+  function money(n) {
+    var s = Math.round(n).toLocaleString('en-US');
+    return fa(s).replace(/,/g, '٬') + ' دلار';
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function iso(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function addDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d; }
+  function parseD(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
+  }
+  function faDate(s) {
+    var t = parseD(s);
+    if (isNaN(t)) return '';
+    try {
+      return new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(t));
+    } catch (e) { return s; }
+  }
+  function rand(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+  var LOGO = '<svg viewBox="0 0 40 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+    '<path d="M3 46V20C3 9 10.5 2 20 2s17 7 17 18v26"/>' +
+    '<path d="M11 46V23c0-5 4-9 9-9s9 4 9 9v23"/>' +
+    '<circle cx="20" cy="28" r="2.4" fill="currentColor" stroke="none"/><path d="M2 46h36"/></svg>';
+
+  /* ---------- Data ---------- */
+  function U(id, w) { return "url('https://images.unsplash.com/photo-" + id + '?auto=format&fit=crop&w=' + (w || 1000) + "&q=70')"; }
+
+  var CITIES = [
+    { id: 'tehran', name: 'تهران', tag: 'پایتخت', locs: ['خیابان ولیعصر، نزدیک پارک ملت', 'میدان ونک', 'خیابان شریعتی', 'بلوار کشاورز، نزدیک پارک لاله'] },
+    { id: 'mashhad', name: 'مشهد', tag: 'شهر زیارتی', locs: ['خیابان امام رضا، نزدیک حرم مطهر', 'بلوار وکیل‌آباد', 'بلوار سجاد', 'خیابان پیروزی'] },
+    { id: 'isfahan', name: 'اصفهان', tag: 'نصف جهان', locs: ['خیابان چهارباغ عباسی', 'نزدیک میدان نقش جهان', 'خیابان شیخ‌بهایی', 'بلوار آزادی'] },
+    { id: 'shiraz', name: 'شیراز', tag: 'شهر باغ‌ها', locs: ['بلوار چمران', 'نزدیک ارگ کریم‌خان', 'خیابان زند', 'بلوار معالی‌آباد'] },
+    { id: 'kish', name: 'کیش', tag: 'جزیره', locs: ['جزیره کیش، ساحل مرجان', 'جزیره کیش، بلوار ایران', 'جزیره کیش، خیابان سنایی', 'جزیره کیش، میدان ایرانیان'] },
+    { id: 'tabriz', name: 'تبریز', tag: 'شهر اولین‌ها', locs: ['بلوار ۲۹ بهمن', 'نزدیک بازار تاریخی تبریز', 'خیابان ولیعصر', 'خیابان امام'] }
+  ];
+
+  var HOTEL_TPL = [
+    { key: 'emarat', name: 'هتل عمارت پارسیان', stars: 5, rating: 4.8, mult: 1.15, offer: false, img: U('1564501049412-61c2a3083791') },
+    { key: 'aria', name: 'هتل آریا', stars: 4, rating: 4.5, mult: 1.0, offer: true, img: U('1551882547-ff40c63fe5fa') },
+    { key: 'sepidar', name: 'هتل سپیدار', stars: 4, rating: 4.3, mult: 0.92, offer: false, img: U('1566073771259-6a8506099945') },
+    { key: 'bozorg', name: 'هتل بزرگ شهر', stars: 5, rating: 4.6, mult: 1.08, offer: false, img: U('1542314831-068cd1dbfeeb') }
+  ];
+
+  var HOTELS = [];
+  CITIES.forEach(function (c) {
+    HOTEL_TPL.forEach(function (t, i) {
+      HOTELS.push({ id: c.id + '-' + t.key, cityId: c.id, name: t.name, stars: t.stars, rating: t.rating, mult: t.mult, offer: t.offer, loc: c.locs[i], img: t.img });
+    });
+  });
+
+  var ROOMS = [
+    { id: 'single', icon: '🛏️', name: 'اتاق یک‌نفره', desc: 'اتاقی آرام و جمع‌وجور برای سفرهای کاری و اقامت‌های کوتاه.', cap: 1, price: 55, old: 0, offer: false,
+      amen: ['تخت یک‌نفره', 'تلویزیون', 'یخچال', 'سرویس بهداشتی'], img: U('1631049307264-da0ec9d70304') },
+    { id: 'double', icon: '🛏️', name: 'اتاق دونفره', desc: 'تخت دونفره بزرگ با فضایی روشن و دنج، مناسب زوج‌ها.', cap: 2, price: 80, old: 92, offer: false,
+      amen: ['تخت دونفره', 'تلویزیون', 'یخچال', 'تهویه مطبوع'], img: U('1618773928121-c32242e63f39') },
+    { id: 'twin', icon: '🛏️', name: 'اتاق دوتخته', desc: 'دو تخت مجزا، مناسب همکاران، دوستان و هم‌سفران.', cap: 2, price: 90, old: 0, offer: false,
+      amen: ['دو تخت مجزا', 'میز کار', 'تلویزیون', 'تهویه مطبوع'], img: U('1590490360182-c33d57733427') },
+    { id: 'family', icon: '👨‍👩‍👧', name: 'اتاق خانوادگی', desc: 'فضای وسیع با تخت دونفره و دو تخت یک‌نفره برای خانواده.', cap: 4, price: 125, old: 142, offer: true,
+      amen: ['تخت دونفره', 'دو تخت یک‌نفره', 'نشیمن', 'یخچال'], img: U('1578683010236-d716f9a3f461') },
+    { id: 'suite', icon: '👑', name: 'سوئیت لوکس', desc: 'سوئیت مستقل با اتاق نشیمن، منظره شهر و خدمات اختصاصی.', cap: 3, price: 180, old: 210, offer: false,
+      amen: ['اتاق نشیمن', 'منظره شهر', 'وان حمام', 'مینی‌بار'], img: U('1582719478250-c89cae4dc85b') }
+  ];
+
+  var SERVICES = [
+    { id: 'breakfast', icon: '🍳', name: 'صبحانه', desc: 'بوفه صبحانه در سالن اصلی', price: 8, basis: 'guestNight', unit: 'هر نفر، هر شب' },
+    { id: 'parking', icon: '🚗', name: 'پارکینگ', desc: 'پارکینگ اختصاصی و محافظت‌شده', price: 6, basis: 'night', unit: 'هر شب' },
+    { id: 'wifi', icon: '📶', name: 'اینترنت', desc: 'اینترنت پرسرعت در اتاق', price: 3, basis: 'night', unit: 'هر شب' },
+    { id: 'roomservice', icon: '🛎️', name: 'سرویس اتاق', desc: 'پذیرایی و نظافت در اتاق', price: 12, basis: 'stay', unit: 'کل اقامت' },
+    { id: 'pool', icon: '🏊', name: 'استفاده از استخر', desc: 'استخر سرپوشیده و سونا', price: 10, basis: 'guestStay', unit: 'هر نفر، کل اقامت' },
+    { id: 'spa', icon: '🧖', name: 'خدمات اسپا', desc: 'ماساژ و آرامش‌بخشی', price: 45, basis: 'adultStay', unit: 'هر بزرگسال، کل اقامت' }
+  ];
+
+  var STEP_NAMES = ['مقصد', 'تاریخ', 'مهمانان', 'اتاق', 'خدمات', 'اطلاعات', 'پرداخت', 'بررسی', 'تأیید'];
+
+  /* ---------- State ---------- */
+  function initialState() {
+    return {
+      step: 0, city: null, hotelId: null,
+      checkIn: iso(addDays(1)), checkOut: iso(addDays(4)),
+      adults: 2, children: 0, rooms: 1,
+      roomId: null, services: [],
+      guest: { name: '', phone: '', email: '', nid: '' },
+      payMethod: 'online', bookingCode: ''
+    };
+  }
+  var state = initialState();
+
+  function getCity() { return CITIES.filter(function (c) { return c.id === state.city; })[0] || null; }
+  function getHotel() { return HOTELS.filter(function (h) { return h.id === state.hotelId; })[0] || null; }
+  function getRoom() { return ROOMS.filter(function (r) { return r.id === state.roomId; })[0] || null; }
+  function priceFor(room, hotel) { return Math.round(room.price * hotel.mult); }
+
+  function nights() {
+    var a = parseD(state.checkIn), b = parseD(state.checkOut);
+    if (isNaN(a) || isNaN(b) || b < a) return 0;
+    return Math.max(1, Math.round((b - a) / 86400000));
+  }
+  function dateError() {
+    if (!state.checkIn || !state.checkOut) return 'لطفاً تاریخ ورود و تاریخ خروج را وارد کنید.';
+    if (state.checkIn < iso(new Date())) return 'تاریخ ورود نمی‌تواند قبل از امروز باشد.';
+    if (state.checkOut < state.checkIn) return 'تاریخ خروج باید بعد از تاریخ ورود باشد.';
+    return '';
+  }
+
+  function calc() {
+    var h = getHotel(), r = getRoom(), n = nights();
+    var per = (h && r) ? priceFor(r, h) : 0;
+    var guests = state.adults + state.children;
+    var lines = [], sTotal = 0;
+    SERVICES.forEach(function (s) {
+      if (state.services.indexOf(s.id) === -1) return;
+      var qty = 1;
+      if (s.basis === 'guestNight') qty = guests * n;
+      else if (s.basis === 'night') qty = n;
+      else if (s.basis === 'stay') qty = 1;
+      else if (s.basis === 'guestStay') qty = guests;
+      else if (s.basis === 'adultStay') qty = state.adults;
+      var cost = s.price * qty;
+      sTotal += cost;
+      lines.push({ name: s.name, cost: cost });
+    });
+    var roomTotal = per * n * state.rooms;
+    return { per: per, n: n, guests: guests, roomTotal: roomTotal, sTotal: sTotal, total: roomTotal + sTotal, lines: lines };
+  }
+
+  /* ---------- Rendering: step 1 ---------- */
+  function renderDestination() {
+    $('cityGrid').innerHTML = CITIES.map(function (c) {
+      var on = state.city === c.id;
+      return '<button type="button" class="city-btn' + (on ? ' selected' : '') + '" data-city="' + c.id + '" aria-pressed="' + on + '">' +
+        '<span class="city-name">' + c.name + '</span><span class="city-tag">' + c.tag + '</span></button>';
+    }).join('');
+    var city = getCity();
+    $('hotelBlock').hidden = !city;
+    if (!city) return;
+    $('hotelCityName').textContent = city.name;
+    $('hotelList').innerHTML = HOTELS.filter(function (h) { return h.cityId === city.id; }).map(function (h) {
+      var on = state.hotelId === h.id;
+      var stars = '★'.repeat(h.stars) + '☆'.repeat(5 - h.stars);
+      return '<button type="button" class="hotel-card' + (on ? ' selected' : '') + '" data-hotel="' + h.id + '" aria-pressed="' + on + '">' +
+        '<span class="photo" style="--img:' + h.img + '">' +
+        (h.offer ? '<span class="badge">پیشنهاد ویژه</span>' : '') +
+        '<span class="tick" aria-hidden="true">✓</span></span>' +
+        '<span class="hotel-body">' +
+        '<span class="hotel-name">' + h.name + '</span>' +
+        '<span class="stars">' + stars + '<small>' + fa(h.stars) + ' ستاره</small></span>' +
+        '<span class="hotel-loc">📍 ' + h.loc + '</span>' +
+        '<span class="hotel-foot"><span class="rating">⭐ ' + fa(h.rating).replace('.', '٫') + '</span>' +
+        '<span class="hotel-price"><small>قیمت پایه از</small> ' + money(priceFor(ROOMS[0], h)) + ' <small>هر شب</small></span></span>' +
+        '</span></button>';
+    }).join('');
+  }
+
+  /* ---------- Step 2 ---------- */
+  function renderDates() {
+    $('checkIn').min = iso(new Date());
+    $('checkIn').value = state.checkIn;
+    $('checkOut').value = state.checkOut;
+    updateDates();
+  }
+  function updateDates() {
+    $('checkInFa').textContent = faDate(state.checkIn);
+    $('checkOutFa').textContent = faDate(state.checkOut);
+    var card = $('nightsCard'), err = dateError();
+    card.classList.toggle('error', !!err);
+    if (err) {
+      $('nightsText').textContent = err;
+      $('nightsNote').textContent = '';
+    } else {
+      var a = parseD(state.checkIn), b = parseD(state.checkOut);
+      $('nightsText').textContent = fa(nights()) + ' شب اقامت';
+      $('nightsNote').textContent = (a === b)
+        ? 'ورود و خروج در یک روز است؛ حداقل یک شب برای شما محاسبه می‌شود.'
+        : 'از ' + faDate(state.checkIn) + ' تا ' + faDate(state.checkOut);
+    }
+  }
+
+  /* ---------- Step 3 ---------- */
+  function renderGuests() {
+    $('adultsVal').textContent = fa(state.adults);
+    $('childrenVal').textContent = fa(state.children);
+    $('roomsVal').textContent = fa(state.rooms);
+    $('guestSummary').textContent = fa(state.adults) + ' بزرگسال' +
+      (state.children ? '، ' + fa(state.children) + ' کودک' : '') + '، ' + fa(state.rooms) + ' اتاق';
+  }
+  function changeCounter(key, dir) {
+    if (key === 'adults') {
+      state.adults = Math.min(8, Math.max(1, state.adults + dir));
+      if (state.rooms > state.adults) state.rooms = state.adults;
+    } else if (key === 'children') {
+      state.children = Math.min(6, Math.max(0, state.children + dir));
+    } else if (key === 'rooms') {
+      state.rooms = Math.min(Math.min(4, state.adults), Math.max(1, state.rooms + dir));
+    }
+    renderGuests();
+  }
+
+  /* ---------- Step 4 ---------- */
+  function renderRooms() {
+    var h = getHotel();
+    if (!h) { $('roomGrid').innerHTML = ''; return; }
+    var guests = state.adults + state.children;
+    $('roomGrid').innerHTML = ROOMS.map(function (r) {
+      var on = state.roomId === r.id;
+      var p = priceFor(r, h);
+      var warn = (r.cap * state.rooms < guests);
+      return '<button type="button" class="room-card' + (on ? ' selected' : '') + '" data-room="' + r.id + '" aria-pressed="' + on + '">' +
+        '<span class="photo" style="--img:' + r.img + '">' +
+        (r.offer ? '<span class="badge">پیشنهاد ویژه</span>' : '') +
+        '<span class="tick" aria-hidden="true">✓</span>' +
+        '<span class="chip-cap">ظرفیت: ' + fa(r.cap) + ' نفر</span></span>' +
+        '<span class="room-body">' +
+        '<span class="room-name">' + r.icon + ' ' + r.name + '</span>' +
+        '<span class="room-desc">' + r.desc + '</span>' +
+        '<span class="amen">' + r.amen.map(function (a) { return '<span>' + a + '</span>'; }).join('') + '</span>' +
+        (warn ? '<span class="room-warn">ظرفیت برای ' + fa(guests) + ' مهمان و ' + fa(state.rooms) + ' اتاق کافی نیست.</span>' : '') +
+        '<span class="room-price"><span class="now">' + money(p) + '</span>' +
+        (r.old ? '<span class="old">' + money(Math.round(r.old * h.mult)) + '</span>' : '') +
+        '<small>هر شب</small></span></span></button>';
+    }).join('');
+  }
+
+  /* ---------- Step 5 ---------- */
+  function renderServices() {
+    $('serviceGrid').innerHTML = SERVICES.map(function (s) {
+      var on = state.services.indexOf(s.id) !== -1;
+      return '<button type="button" class="service-card' + (on ? ' selected' : '') + '" data-service="' + s.id + '" aria-pressed="' + on + '">' +
+        '<span class="service-icon">' + s.icon + '</span>' +
+        '<span class="service-text"><span class="service-name">' + s.name + '</span><span class="service-desc">' + s.desc + '</span></span>' +
+        '<span class="service-price">' + money(s.price) + '<small>' + s.unit + '</small></span>' +
+        '<span class="check" aria-hidden="true"></span></button>';
+    }).join('');
+    $('serviceTotal').textContent = money(calc().sTotal);
+  }
+
+  /* ---------- Step 6 ---------- */
+  var GUEST_FIELDS = [
+    { id: 'guestName', key: 'name', msg: 'لطفاً نام و نام خانوادگی را وارد کنید.' },
+    { id: 'guestPhone', key: 'phone', msg: 'لطفاً شماره تماس را وارد کنید.' },
+    { id: 'guestEmail', key: 'email', msg: 'لطفاً ایمیل را وارد کنید.' },
+    { id: 'guestNid', key: 'nid', msg: 'لطفاً کد ملی را وارد کنید.' }
+  ];
+  function renderGuestForm() {
+    GUEST_FIELDS.forEach(function (f) { $(f.id).value = state.guest[f.key]; });
+  }
+  function validateGuest() {
+    var first = '';
+    GUEST_FIELDS.forEach(function (f) {
+      var v = state.guest[f.key].trim(), m = '';
+      if (!v) m = f.msg;
+      else if (f.key === 'email' && !/^\S+@\S+\.\S+$/.test(v)) m = 'ایمیل واردشده معتبر نیست.';
+      var input = $(f.id), fe = $('fe-' + f.id);
+      input.classList.toggle('invalid', !!m);
+      fe.textContent = m; fe.hidden = !m;
+      if (m && !first) first = m;
+    });
+    return first ? 'لطفاً فیلدهای ضروری را به‌درستی تکمیل کنید.' : '';
+  }
+
+  /* ---------- Step 7 ---------- */
+  var CARD_IDS = ['cardNumber', 'cardHolder', 'cardExpiry', 'cardCvv'];
+  function renderPayment() {
+    $('payOnline').checked = state.payMethod === 'online';
+    $('payArrival').checked = state.payMethod === 'arrival';
+    syncPayment();
+  }
+  function syncPayment() {
+    $('cardForm').hidden = state.payMethod !== 'online';
+    $('arrivalNote').hidden = state.payMethod !== 'arrival';
+  }
+  function validatePayment() {
+    if (state.payMethod !== 'online') return '';
+    var bad = false;
+    CARD_IDS.forEach(function (id) {
+      var empty = !$(id).value.trim();
+      $(id).classList.toggle('invalid', empty);
+      if (empty) bad = true;
+    });
+    return bad ? 'لطفاً تمام فیلدهای کارت را پر کنید.' : '';
+  }
+
+  /* ---------- Step 8 ---------- */
+  function guestsText() {
+    return fa(state.adults) + ' بزرگسال' + (state.children ? '، ' + fa(state.children) + ' کودک' : '');
+  }
+  function row(l, v) { return '<div><dt>' + l + '</dt><dd>' + v + '</dd></div>'; }
+  function renderReview() {
+    var h = getHotel(), r = getRoom(), c = calc(), city = getCity();
+    var svc = c.lines.length ? c.lines.map(function (l) { return l.name; }).join('، ') : 'بدون خدمات اضافی';
+    var svcRows = c.lines.map(function (l) {
+      return '<div class="pr sub"><span>' + l.name + '</span><span>' + money(l.cost) + '</span></div>';
+    }).join('');
+    $('reviewBox').innerHTML =
+      '<div class="review-grid">' +
+      '<section class="review-card"><div class="review-head"><h3>اقامت</h3><button type="button" class="link-btn" data-goto="1">ویرایش</button></div><dl>' +
+        row('هتل', esc(h.name)) + row('شهر', city.name) +
+        row('تاریخ ورود', faDate(state.checkIn)) + row('تاریخ خروج', faDate(state.checkOut)) +
+        row('تعداد شب', fa(c.n) + ' شب') + '</dl></section>' +
+      '<section class="review-card"><div class="review-head"><h3>مهمانان و اتاق</h3><button type="button" class="link-btn" data-goto="3">ویرایش</button></div><dl>' +
+        row('تعداد مهمان', guestsText()) + row('تعداد اتاق', fa(state.rooms) + ' اتاق') +
+        row('نوع اتاق', r.name) + row('خدمات انتخاب‌شده', svc) + '</dl></section>' +
+      '<section class="review-card"><div class="review-head"><h3>اطلاعات مهمان</h3><button type="button" class="link-btn" data-goto="6">ویرایش</button></div><dl>' +
+        row('نام مهمان', esc(state.guest.name)) + row('شماره تماس', esc(state.guest.phone)) + '</dl></section>' +
+      '<section class="review-card"><div class="review-head"><h3>پرداخت</h3><button type="button" class="link-btn" data-goto="7">ویرایش</button></div><dl>' +
+        row('روش پرداخت', state.payMethod === 'online' ? 'پرداخت آنلاین' : 'پرداخت هنگام ورود') + '</dl></section>' +
+      '</div>' +
+      '<div class="price-card">' +
+        '<div class="pr"><span>قیمت هر شب<small>' + fa(state.rooms) + ' اتاق × ' + fa(c.n) + ' شب</small></span><span>' + money(c.per) + '</span></div>' +
+        '<div class="pr"><span>مجموع هزینه اتاق</span><span>' + money(c.roomTotal) + '</span></div>' +
+        '<div class="pr"><span>هزینه خدمات</span><span>' + money(c.sTotal) + '</span></div>' + svcRows +
+        '<div class="pr total"><b>قیمت کل اقامت</b><strong>' + money(c.total) + '</strong></div>' +
+      '</div>';
+  }
+
+  /* ---------- Step 9 ---------- */
+  function barcodeSVG(code) {
+    var x = 0, out = '';
+    for (var k = 0; k < code.length; k++) {
+      var v = code.charCodeAt(k);
+      for (var i = 0; i < 6; i++) {
+        var w = ((v >> i) & 1) ? 3 : 1.5;
+        out += '<rect x="' + x + '" y="0" width="' + w + '" height="40"/>';
+        x += w + 1.5;
+      }
+    }
+    return '<svg viewBox="0 0 ' + x + ' 40" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">' + out + '</svg>';
+  }
+  function renderVoucher() {
+    var h = getHotel(), r = getRoom(), c = calc(), city = getCity();
+    var svc = c.lines.length ? c.lines.map(function (l) { return l.name; }).join('، ') : 'بدون خدمات اضافی';
+    $('voucher').innerHTML =
+      '<article class="voucher">' +
+        '<div class="v-top"><div class="brand">' + LOGO + '<div><strong>هتل عمارت پارسیان</strong><small>رزرو آنلاین اتاق</small></div></div>' +
+        '<div class="v-title">کارت رزرو دیجیتال</div></div>' +
+        '<div class="v-status"><span class="stamp">رزرو تأیید شد ✓</span>' +
+        '<span class="amount"><small>مبلغ نهایی</small><b>' + money(c.total) + '</b></span></div>' +
+        '<div class="v-body"><dl class="v-grid">' +
+          '<div><dt>نام هتل</dt><dd>' + esc(h.name) + '</dd></div>' +
+          '<div><dt>نام مهمان</dt><dd>' + esc(state.guest.name) + '</dd></div>' +
+          '<div><dt>شهر</dt><dd>' + city.name + '</dd></div>' +
+          '<div><dt>نوع اتاق</dt><dd>' + r.name + '، ' + fa(state.rooms) + ' اتاق</dd></div>' +
+          '<div><dt>تاریخ ورود</dt><dd>' + faDate(state.checkIn) + '</dd></div>' +
+          '<div><dt>تاریخ خروج</dt><dd>' + faDate(state.checkOut) + '</dd></div>' +
+          '<div><dt>تعداد شب</dt><dd>' + fa(c.n) + ' شب</dd></div>' +
+          '<div><dt>تعداد مهمان</dt><dd>' + guestsText() + '</dd></div>' +
+          '<div class="full"><dt>خدمات انتخاب‌شده</dt><dd>' + svc + '</dd></div>' +
+        '</dl></div>' +
+        '<div class="perf"></div>' +
+        '<div class="v-stub"><div><small>شماره رزرو</small><div class="v-code">' + state.bookingCode + '</div></div>' +
+        '<div class="barcode">' + barcodeSVG(state.bookingCode) + '</div></div>' +
+      '</article>';
+  }
+
+  /* ---------- Progress & bar ---------- */
+  function refreshProgress() {
+    $('progress').hidden = state.step === 0;
+    if (state.step === 0) return;
+    $('progressLabel').textContent = 'مرحله ' + fa(state.step) + ' از ' + fa(9) + ': ' + STEP_NAMES[state.step - 1];
+    $('progressList').innerHTML = STEP_NAMES.map(function (n, i) {
+      var idx = i + 1;
+      var done = idx < state.step || state.step === 9;
+      var cur = idx === state.step && state.step !== 9;
+      var clickable = idx < state.step && state.step < 9;
+      var inner = '<span class="p-dot">' + (done ? '✓' : fa(idx)) + '</span><span class="p-name">' + n + '</span>';
+      var tag = clickable
+        ? '<button type="button" class="p-btn" data-pstep="' + idx + '" aria-label="بازگشت به مرحله ' + n + '">' + inner + '</button>'
+        : '<span class="p-btn">' + inner + '</span>';
+      return '<li class="' + (done ? 'done' : (cur ? 'current' : '')) + '"' + (cur ? ' aria-current="step"' : '') + '>' + tag + '</li>';
+    }).join('');
+  }
+  function refreshBar() {
+    var show = state.step >= 1 && state.step <= 8;
+    $('actionbar').hidden = !show;
+    $('btnNext').textContent = state.step === 8 ? 'تأیید و ثبت رزرو' : 'ادامه';
+    var c = calc();
+    var showTotal = state.step >= 4 && getHotel() && getRoom() && c.n > 0;
+    $('liveTotal').hidden = !showTotal;
+    $('barSpacer').hidden = !!showTotal;
+    if (showTotal) $('liveTotalVal').textContent = money(c.total);
+  }
+
+  /* ---------- Navigation ---------- */
+  function go(n) {
+    state.step = n;
+    Array.prototype.forEach.call(document.querySelectorAll('.step'), function (s) {
+      s.classList.toggle('active', Number(s.getAttribute('data-step')) === n);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.err'), function (e) { e.hidden = true; e.textContent = ''; });
+    Array.prototype.forEach.call(document.querySelectorAll('.invalid'), function (e) { e.classList.remove('invalid'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.field-error'), function (e) { e.hidden = true; });
+    if (n === 1) renderDestination();
+    else if (n === 2) renderDates();
+    else if (n === 3) renderGuests();
+    else if (n === 4) renderRooms();
+    else if (n === 5) renderServices();
+    else if (n === 6) renderGuestForm();
+    else if (n === 7) renderPayment();
+    else if (n === 8) renderReview();
+    refreshProgress();
+    refreshBar();
+    window.scrollTo(0, 0);
+  }
+
+  function showError(step, msg) {
+    var el = $('err-' + step);
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    if (el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function validate(step) {
+    if (step === 1) {
+      if (!state.city) return 'لطفاً یک شهر انتخاب کنید.';
+      if (!state.hotelId) return 'لطفاً یکی از هتل‌ها را انتخاب کنید.';
+    } else if (step === 2) {
+      return dateError();
+    } else if (step === 4) {
+      var r = getRoom();
+      if (!r) return 'لطفاً یک نوع اتاق انتخاب کنید.';
+      var guests = state.adults + state.children;
+      if (r.cap * state.rooms < guests) {
+        return 'ظرفیت این اتاق برای ' + fa(guests) + ' مهمان کافی نیست. تعداد اتاق را افزایش دهید یا نوع دیگری انتخاب کنید.';
+      }
+    } else if (step === 6) {
+      return validateGuest();
+    } else if (step === 7) {
+      return validatePayment();
+    }
+    return '';
+  }
+
+  function confirmBooking() {
+    state.bookingCode = 'HTL-' + rand(1000, 9999) + '-' + rand(1000, 9999);
+    renderVoucher();
+    CARD_IDS.forEach(function (id) { $(id).value = ''; });
+    go(9);
+  }
+
+  function resetAll() {
+    state = initialState();
+    CARD_IDS.forEach(function (id) { $(id).value = ''; });
+    GUEST_FIELDS.forEach(function (f) { $(f.id).value = ''; });
+    $('voucher').innerHTML = '';
+    go(0);
+  }
+
+  /* ---------- Events ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-logo]'), function (el) { el.innerHTML = LOGO; });
+
+  $('btnStart').addEventListener('click', function () { go(1); });
+  $('btnBack').addEventListener('click', function () { if (state.step > 0) go(state.step - 1); });
+  $('btnNext').addEventListener('click', function () {
+    var msg = validate(state.step);
+    if (msg) { showError(state.step, msg); return; }
+    if (state.step === 8) { confirmBooking(); return; }
+    go(state.step + 1);
+  });
+  $('btnNewBooking').addEventListener('click', resetAll);
+  $('btnPrint').addEventListener('click', function () { window.print(); });
+
+  $('progressList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-pstep]');
+    if (b) go(Number(b.getAttribute('data-pstep')));
+  });
+
+  $('cityGrid').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-city]');
+    if (!b) return;
+    var id = b.getAttribute('data-city');
+    if (state.city !== id) { state.city = id; state.hotelId = null; }
+    renderDestination();
+    $('err-1').hidden = true;
+    if ($('hotelBlock').scrollIntoView) $('hotelBlock').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('hotelList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-hotel]');
+    if (!b) return;
+    state.hotelId = b.getAttribute('data-hotel');
+    renderDestination();
+    $('err-1').hidden = true;
+  });
+
+  $('checkIn').addEventListener('input', function () { state.checkIn = this.value; updateDates(); $('err-2').hidden = true; });
+  $('checkIn').addEventListener('change', function () { state.checkIn = this.value; updateDates(); });
+  $('checkOut').addEventListener('input', function () { state.checkOut = this.value; updateDates(); $('err-2').hidden = true; });
+  $('checkOut').addEventListener('change', function () { state.checkOut = this.value; updateDates(); });
+
+  document.querySelector('.counter-list').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-counter]');
+    if (!b) return;
+    changeCounter(b.getAttribute('data-counter'), Number(b.getAttribute('data-dir')));
+  });
+
+  $('roomGrid').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-room]');
+    if (!b) return;
+    state.roomId = b.getAttribute('data-room');
+    $('err-4').hidden = true;
+    renderRooms();
+    refreshBar();
+  });
+
+  $('serviceGrid').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-service]');
+    if (!b) return;
+    var id = b.getAttribute('data-service');
+    var i = state.services.indexOf(id);
+    if (i === -1) state.services.push(id); else state.services.splice(i, 1);
+    renderServices();
+    refreshBar();
+  });
+
+  GUEST_FIELDS.forEach(function (f) {
+    $(f.id).addEventListener('input', function () {
+      state.guest[f.key] = this.value;
+      this.classList.remove('invalid');
+      $('fe-' + f.id).hidden = true;
+    });
+  });
+
+  CARD_IDS.forEach(function (id) {
+    $(id).addEventListener('input', function () { this.classList.remove('invalid'); });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="pay"]'), function (inp) {
+    inp.addEventListener('change', function () {
+      state.payMethod = this.value;
+      $('err-7').hidden = true;
+      syncPayment();
+    });
+  });
+
+  $('reviewBox').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-goto]');
+    if (b) go(Number(b.getAttribute('data-goto')));
+  });
+
+  /* ---------- Init ---------- */
+  go(0);
+})();
+</script>
+</body>
+</html>
